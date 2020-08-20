@@ -1,0 +1,44 @@
+spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+  #  datasource:
+  #    url: jdbc:mysql://127.0.0.1:3306/test_read_write?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
+  #    username: root
+  #    password: root
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    type: com.zaxxer.hikari.HikariDataSource
+  #    hikari:
+  #      minimum-idle: 5
+  #      connection-test-query: SELECT 1 FROM DUAL
+  #      maximum-pool-size: 20
+  #      auto-commit: true
+  #      idle-timeout: 30000
+  #      pool-name: ReadWriteSplittingHikariCP
+  #      max-lifetime: 60000
+  #      connection-timeout: 30000
+
+  shardingsphere:
+    datasource:
+      names: master,slave0
+      master:
+        jdbcUrl: jdbc:mysql://127.0.0.1:3306/test_read_write?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        password: root
+        username: root
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.zaxxer.hikari.HikariDataSource
+      slave0:
+        jdbcUrl: jdbc:mysql://127.0.0.1:3307/test_read_write?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        password: root
+        username: root
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.zaxxer.hikari.HikariDataSource
+    masterslave:
+      name: ds_ms
+      master-data-source-name: master
+      slave-data-source-names: slave0
+      load-balance-algorithm-type: round_robin
+    props:
+      sql:
+        show: true
